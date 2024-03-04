@@ -5,23 +5,38 @@ on:
   workflow_dispatch:
 
 jobs:
-  test_v4:
+  test_v4_fix:
     runs-on: ubuntu-latest
-    name: Testing v4
+    name: Testing v4 on fix
     steps:
 
       - name: Checkout Repository
         uses: actions/checkout@v4
 
       - name: Setup Java
-        uses: actions/setup-java@v4
+        uses: HarithaVattikuti/setup-java@httpclienttest
         with:
           java-version: 17
           distribution: "oracle"
           cache: "maven"
 
-  test_v3:
+  test_v4_main:
     runs-on: windows-latest
+    name: Testing v4 on main
+    steps:
+
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: HarithaVattikuti/setup-java@main
+        with:
+          java-version: 17
+          distribution: "oracle"
+          cache: "maven"
+          
+  test_v3_fix:
+    runs-on: ubuntu-latest
     name: Testing v3
     steps:
 
