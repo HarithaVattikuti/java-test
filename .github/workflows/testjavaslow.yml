@@ -1,0 +1,36 @@
+
+name: Java CI with setup-java v3
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test_v4:
+    runs-on: ubuntu-latest
+    name: Testing v4
+    steps:
+
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: 17
+          distribution: "oracle"
+          cache: "maven"
+
+  test_v3:
+    runs-on: windows-latest
+    name: Testing v3
+    steps:
+
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: 17
+          distribution: "oracle"
+          cache: "maven"
