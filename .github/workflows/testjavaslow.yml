@@ -1,5 +1,5 @@
 
-name: Java CI with setup-java v3
+name: Java slowness issue
 
 on:
   workflow_dispatch:
