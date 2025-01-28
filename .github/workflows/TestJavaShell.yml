@@ -20,6 +20,6 @@ jobs:
       uses: actions/setup-java@v4
       with:
         distribution: 'corretto'
-        java-version: ${{ env.JAVA_VERSION }}
+        java-version: "$JAVA_VERSION"
     # Add other steps here
 
