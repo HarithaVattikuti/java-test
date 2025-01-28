@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     - name: Set up environment
       run: . .github/workflows/tools.sh
     - name: Set up Java
@@ -17,3 +17,5 @@ jobs:
         distribution: 'corretto'
         java-version: ${{ env.JAVA_VERSION }}
     # Add other steps here
+env:
+  JAVA_VERSION: ${{ secrets.JAVA_VERSION }}
