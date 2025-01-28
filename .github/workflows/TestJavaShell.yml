@@ -10,7 +10,10 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Set up environment
-      run: . .github/workflows/tools.sh
+      run: |
+        . .github/workflows/tools.sh
+        echo "JAVA_VERSION=$JAVA_VERSION" >> $GITHUB_ENV
+
     - name: Display Java version
       run: echo "Java version is $JAVA_VERSION"
     - name: Set up Java
