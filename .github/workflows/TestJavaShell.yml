@@ -22,5 +22,4 @@ jobs:
         distribution: 'corretto'
         java-version: ${{ env.JAVA_VERSION }}
     # Add other steps here
-env:
-  JAVA_VERSION: ${{ secrets.JAVA_VERSION }}
+
