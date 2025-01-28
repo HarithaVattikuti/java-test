@@ -1,0 +1,19 @@
+name: Build
+
+on: 
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up environment
+      run: . .github/workflows/tools.sh
+    - name: Set up Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'corretto'
+        java-version: ${{ env.JAVA_VERSION }}
+    # Add other steps here
