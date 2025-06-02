@@ -15,5 +15,4 @@ jobs:
         with:
           repository: HarithaVattikuti/java-test
           ref: main
-        with:
           token: ${{ secrets.token }}
