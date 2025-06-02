@@ -1,0 +1,16 @@
+name: Reusable1 workflow
+
+on:
+  workflow_call:
+    secrets:
+      token:
+        required: true
+
+jobs:
+  do-something:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout reusable workflow repo
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.token }}
