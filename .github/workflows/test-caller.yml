@@ -1,0 +1,10 @@
+name: Test Caller
+
+on:
+  workflow_dispatch:
+
+jobs:
+  call-local:
+    uses: ./.github/workflows/reusable.yml
+    secrets:
+      token: ${{ secrets.PAT }}
