@@ -7,15 +7,13 @@ jobs:
   test-setup-java-asdf-positive:
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
         os: ["macos-13","macos-latest","ubuntu-latest","ubuntu-22.04-arm","windows-latest","windows-11-arm"]
         version_line:
-          - "openjdk-21.0.1+12"
-          - "temurin-11.0.17+8"
-          - "corretto-17.0.8.1.1"
-          - "zulu-8.72.0.17"
-          - "adoptopenjdk-8.0.282+8"
-          - "graalvm-22.3.0.1"
+          - "corretto-11.0.28+6.1"
+          - "zulu-21.0.8+9"
+          - "graalvm-21.0.4+8.1"
           - "temurin-21.0.5+11.0.LTS"
           - "adoptopenjdk-21.0.6+7.0.LTS"
     steps:
