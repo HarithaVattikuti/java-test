@@ -22,9 +22,18 @@ jobs:
       - name: Create .tool-versions
         run: |
           echo "java ${{ matrix.version_line }}" > .tool-versions
+      
+      - name: Extract distribution
+        id: extract
+        run: |
+          version_line="${{ matrix.version_line }}"
+          distribution="${version_line%%-*}"
+          echo "distribution=$distribution" >> $GITHUB_OUTPUT
+
       - uses: actions/checkout@v4
       - uses: aparnajyothi-y/setup-java@toolversions-regex-update # Assuming the PR branch is checked out in the action
         with:
+          distribution: ${{ steps.extract.outputs.distribution }}
           java-version-file: ".tool-versions"
       - name: Validate Java Version
         run: java -version
@@ -48,9 +57,18 @@ jobs:
           else
             echo "java ${{ matrix.version_line }}" > .tool-versions
           fi
+      
+      - name: Extract distribution
+        id: extract
+        run: |
+          version_line="${{ matrix.version_line }}"
+          distribution="${version_line%%-*}"
+          echo "distribution=$distribution" >> $GITHUB_OUTPUT
+
       - uses: actions/checkout@v4
       - uses: aparnajyothi-y/setup-java@toolversions-regex-update # Assuming the PR branch is checked out in the action
         with:
+          distribution: ${{ steps.extract.outputs.distribution }}
           java-version-file: ".tool-versions"
       - name: Setup Java Should Fail
         run: |
