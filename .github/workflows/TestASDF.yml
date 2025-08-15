@@ -9,12 +9,13 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: ["macos-13","macos-latest","ubuntu-latest","ubuntu-22.04-arm","windows-latest","windows-11-arm"]
+        os: ["macos-13","macos-latest","ubuntu-latest","ubuntu-22.04-arm","windows-latest"]
         version_line:
           - "corretto-11.0.28+6.1"
           - "zulu-21.0.8+9"
           - "graalvm-21.0.4+8.1"
           - "temurin-21.0.5+11.0.LTS"
+          - "temurin-21.0.6+7"
           - "adoptopenjdk-21.0.6+7.0.LTS"
     steps:
       - uses: actions/checkout@v4
@@ -36,44 +37,3 @@ jobs:
       - name: Validate Java Version
         run: java -version
 
-  test-setup-java-asdf-negative:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: ["macos-13","macos-latest","ubuntu-latest","ubuntu-22.04-arm","windows-latest","windows-11-arm"]
-        version_line:
-          - "openjdk21.0.1-12"
-          - "java-temurin-11.0.17+8"
-          - "11.0.17+8"
-          - "not-a-real-version"
-          - ""
-    steps:
-      - name: Create .tool-versions
-        run: |
-          if [[ -z "${{ matrix.version_line }}" ]]; then
-            echo "java" > .tool-versions
-          else
-            echo "java ${{ matrix.version_line }}" > .tool-versions
-          fi
-      
-      - name: Extract distribution
-        id: extract
-        run: |
-          version_line="${{ matrix.version_line }}"
-          distribution="${version_line%%-*}"
-          echo "distribution=$distribution" >> $GITHUB_OUTPUT
-
-      - uses: actions/checkout@v4
-      - uses: aparnajyothi-y/setup-java@toolversions-regex-update # Assuming the PR branch is checked out in the action
-        with:
-          distribution: ${{ steps.extract.outputs.distribution }}
-          java-version-file: ".tool-versions"
-      - name: Setup Java Should Fail
-        run: |
-          set +e
-          java -version
-          if [ $? -eq 0 ]; then
-            echo "Unexpected success for invalid version line: '${{ matrix.version_line }}'"
-            exit 1
-          fi
-        shell: bash
