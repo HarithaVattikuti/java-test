@@ -19,6 +19,7 @@ jobs:
           - "temurin-21.0.5+11.0.LTS"
           - "adoptopenjdk-21.0.6+7.0.LTS"
     steps:
+      - uses: actions/checkout@v4
       - name: Create .tool-versions
         run: |
           echo "java ${{ matrix.version_line }}" > .tool-versions
@@ -30,7 +31,6 @@ jobs:
           distribution="${version_line%%-*}"
           echo "distribution=$distribution" >> $GITHUB_OUTPUT
 
-      - uses: actions/checkout@v4
       - uses: aparnajyothi-y/setup-java@toolversions-regex-update # Assuming the PR branch is checked out in the action
         with:
           distribution: ${{ steps.extract.outputs.distribution }}
