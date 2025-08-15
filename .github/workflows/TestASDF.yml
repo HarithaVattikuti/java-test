@@ -25,6 +25,7 @@ jobs:
       
       - name: Extract distribution
         id: extract
+        shell: bash
         run: |
           version_line="${{ matrix.version_line }}"
           distribution="${version_line%%-*}"
