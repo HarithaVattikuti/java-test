@@ -7,37 +7,59 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: ['macos-latest','windows-11-arm','ubuntu-22.04-arm','windows-latest','macos-13','ubuntu-latest']
+        os:
+          - ubuntu-latest
+          - ubuntu-22.04-arm
+          - macos-latest
+          - macos-13
+          - windows-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      # Step 1: Use setup-java with cache
-      - name: Setup Java 25 Temurin with cache
+      - name: Setup Java (Temurin 25 or EA fallback)
+        id: setup-java
         uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: 25
-          cache: 'gradle'
+          check-latest: true
+          cache: gradle
 
-      - name: Verify Java version
+      - name: Verify Java
         run: java -version
 
-      # Step 2: Force cache reuse (simulate reused cache)
-      - name: Restore cached JDK manually
-        uses: actions/cache@v4
-        with:
-          path: /usr/lib/jvm/temurin-25-jdk-amd64
-          key: temurin25-cache-key-fixed
-          restore-keys: |
-            temurin25-cache-key-
-      # Step 3: Try running jlink to trigger verification
-      - name: Run jlink to trigger validation
+      # INTENTIONAL mutation for diagnostic reproduction (Linux/Windows Temurin 25)
+      - name: Mutate ct.sym for integrity test
+        if: contains(steps.setup-java.outputs.version, '25') && runner.os != 'macOS'
+        shell: bash
         run: |
-          jlink \
-            --add-modules java.base \
-            --output ./minimal-runtime
-      - name: Check integrity files
+          set -e
+          CT_SYM="$JAVA_HOME/lib/ct.sym"
+          if [ ! -f "$CT_SYM" ]; then
+            echo "No ct.sym present; skipping."
+            exit 0
+          fi
+          echo "Original SHA:"
+          sha512sum "$CT_SYM"
+          TMPDIR=$(mktemp -d)
+          pushd "$TMPDIR" > /dev/null
+          unzip -qq "$CT_SYM"
+          find . -type f -exec touch -t 202401010101 {} \;
+          zip -q -X -r rebuilt.sym .
+          popd > /dev/null
+            cp "$CT_SYM" "${CT_SYM}.bak"
+            cp "$TMPDIR/rebuilt.sym" "$CT_SYM"
+          echo "Mutated SHA:"
+          sha512sum "$CT_SYM"
+          rm -rf "$TMPDIR"
+
+      - name: jlink after mutation
+        if: contains(steps.setup-java.outputs.version, '25')
         run: |
-          echo "Checking checksum of ct.sym..."
-          sha512sum /usr/lib/jvm/temurin-25-jdk-amd64/lib/ct.sym || true
+          set -e
+          echo "Running jlink..."
+          jlink --add-modules java.base --output minimal-runtime || {
+            echo "jlink failed (expected on strict integrity platforms)."
+            exit 1
+          }
+          echo "jlink succeeded (integrity not triggered here)."
