@@ -1,0 +1,43 @@
+name: Cached Temurin 25 Issue
+on: [workflow_dispatch]
+
+jobs:
+  test-temurin-cache:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ['macos-latest','windows-11-arm','ubuntu-22.04-arm','windows-latest','macos-13','ubuntu-latest']
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Step 1: Use setup-java with cache
+      - name: Setup Java 25 Temurin with cache
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 25
+          cache: 'gradle'
+
+      - name: Verify Java version
+        run: java -version
+
+      # Step 2: Force cache reuse (simulate reused cache)
+      - name: Restore cached JDK manually
+        uses: actions/cache@v4
+        with:
+          path: /usr/lib/jvm/temurin-25-jdk-amd64
+          key: temurin25-cache-key-fixed
+          restore-keys: |
+            temurin25-cache-key-
+      # Step 3: Try running jlink to trigger verification
+      - name: Run jlink to trigger validation
+        run: |
+          jlink \
+            --add-modules java.base \
+            --output ./minimal-runtime
+      - name: Check integrity files
+        run: |
+          echo "Checking checksum of ct.sym..."
+          sha512sum /usr/lib/jvm/temurin-25-jdk-amd64/lib/ct.sym || true
