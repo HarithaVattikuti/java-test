@@ -1,0 +1,68 @@
+name: Test Microsoft JDK 25
+
+on:
+  workflow_dispatch:
+
+
+jobs:
+  test-microsoft-jdk-25:
+    name: Test Microsoft JDK 25 - ${{ matrix.os }} - ${{ matrix.architecture }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-13, macos-latest,ubuntu-22.04-arm, windows-11-arm]
+        architecture: [x64, aarch64]
+        exclude:
+          # Exclude x64 from macos-latest (M1 runners)
+          - os: macos-latest
+            architecture: x64
+          # Exclude aarch64 from macos-13 (Intel runners)
+          - os: macos-13
+            architecture: aarch64
+          # Ubuntu and Windows runners don't support aarch64 architecture natively
+          - os: ubuntu-latest
+            architecture: aarch64
+          - os: windows-latest
+            architecture: aarch64
+          - os: ubuntu-22.04-arm
+            architecture: x64
+          - os: windows-11-arm
+            architecture: x64
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+      
+      - name: Setup Microsoft JDK 25
+        uses: HarithaVattikuti/setup-java@Ms25test
+        with:
+          distribution: 'microsoft'
+          java-version: '25'
+          architecture: ${{ matrix.architecture }}
+      
+      - name: Verify distribution
+        run: java -XshowSettings:properties -version 2>&1 | grep -i microsoft || java -version 2>&1 | grep -i microsoft
+        shell: bash
+
+  test-version-ranges:
+    name: Test version ranges - ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-13, macos-latest]
+        version: ['25.x', '25.0.x', '25.0.0']
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+      
+      - name: Setup Microsoft JDK with version ${{ matrix.version }}
+        uses: HarithaVattikuti/setup-java@Ms25test
+        with:
+          distribution: 'microsoft'
+          java-version: ${{ matrix.version }}
+      
+      - name: Verify Java version
+        run: java -version
