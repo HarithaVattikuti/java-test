@@ -1,0 +1,68 @@
+name: Test SapMachine Changes
+
+on:
+  workflow_dispatch:
+
+
+jobs:
+  test-sap-jdk-21:
+    name: Test sap JDK 21 - ${{ matrix.os }} - ${{ matrix.architecture }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-13, macos-latest,ubuntu-22.04-arm, windows-11-arm]
+        architecture: [x64, aarch64]
+        exclude:
+          # Exclude x64 from macos-latest (M1 runners)
+          - os: macos-latest
+            architecture: x64
+          # Exclude aarch64 from macos-13 (Intel runners)
+          - os: macos-13
+            architecture: aarch64
+          # Ubuntu and Windows runners don't support aarch64 architecture natively
+          - os: ubuntu-latest
+            architecture: aarch64
+          - os: windows-latest
+            architecture: aarch64
+          - os: ubuntu-22.04-arm
+            architecture: x64
+          - os: windows-11-arm
+            architecture: x64
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+      
+      - name: Setup sap JDK 21
+        uses: skateball/setup-java@sapmachineUrlsUpdated
+        with:
+          distribution: 'sapmachine'
+          java-version: '21'
+          architecture: ${{ matrix.architecture }}
+      
+      - name: Verify distribution
+        run: java -XshowSettings:properties -version 2>&1 | grep -i sapmachine || java -version 2>&1 | grep -i sapmachine
+        shell: bash
+
+  test-version-ranges:
+    name: Test version ranges - ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-13, macos-latest, windows-11-arm, ubuntu-22.04-arm]
+        version: ['25.x', '25.0.x', '25.0.1']
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+      
+      - name: Setup Microsoft JDK with version ${{ matrix.version }}
+        uses: skateball/setup-java@sapmachineUrlsUpdated
+        with:
+          distribution: 'sapmachine'
+          java-version: ${{ matrix.version }}
+      
+      - name: Verify Java version
+        run: java -version
