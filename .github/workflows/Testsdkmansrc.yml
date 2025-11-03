@@ -12,7 +12,7 @@ jobs:
       matrix:
         os: [macos-latest, windows-latest, ubuntu-latest]
         distribution: ['adopt', 'zulu', 'liberica']
-        java-version-file: ['.java-version', '.tool-versions', '.sdkmanrc']
+        java-version-file: ['.tool-versions', '.sdkmanrc']
     steps:
       - name: Checkout
         uses: actions/checkout@v4
