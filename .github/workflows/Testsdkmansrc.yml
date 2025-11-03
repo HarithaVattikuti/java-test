@@ -11,7 +11,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [macos-latest, windows-latest, ubuntu-latest]
-        distribution: ['adopt', 'zulu', 'liberica']
+        distribution: ['adopt', 'zulu', 'liberica','temurin']
         java-version-file: ['.tool-versions', '.sdkmanrc']
     steps:
       - name: Checkout
