@@ -1,0 +1,45 @@
+
+name: Test Graalvm rate limit
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test-graalvm:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ["ubuntu-latest"]
+        version:
+          - "11"
+          - "21.0.4+8.1"
+          - "22-ea"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: mahabaleshwars/setup-java@fix/graalvm-api-rate-limit
+        with:
+          distribution: 'graalvm'
+          java-version: ${{ matrix.version }}
+      - name: Validate Java Version
+        run: java -version
+  
+  test-graalvm-arch:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ["ubuntu-latest"]
+        version:
+          - "11"
+          - "21.0.4+8.1"
+          - "22-ea"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: mahabaleshwars/setup-java@fix/graalvm-api-rate-limit
+        with:
+          distribution: 'graalvm'
+          java-version: ${{ matrix.version }}
+          architecture: 'x86'
+      - name: Validate Java Version
+        run: java -version
