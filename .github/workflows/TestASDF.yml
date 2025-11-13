@@ -30,10 +30,10 @@ jobs:
         shell: bash
         run: |
           version_line="${{ matrix.version_line }}"
-          # distribution="${version_line%%-*}"
+          distribution="${version_line%%-*}"
           echo "distribution=$distribution" >> $GITHUB_OUTPUT
 
-      - uses: aparnajyothi-y/setup-java@toolversions-regex-update # Assuming the PR branch is checked out in the action
+      - uses: actions/setup-java@v5 #aparnajyothi-y/setup-java@toolversions-regex-update # Assuming the PR branch is checked out in the action
         with:
           distribution: ${{ steps.extract.outputs.distribution }}
           java-version-file: ".tool-versions"
