@@ -17,6 +17,8 @@ jobs:
           - "temurin-21.0.5+11.0.LTS"
           - "temurin-21.0.6+7"
           - "adoptopenjdk-21.0.6+7.0.LTS"
+          - "temurin-21.0.6+7"
+          - "temurin-21.0.6+7.0.LTS"
     steps:
       - uses: actions/checkout@v4
       - name: Create .tool-versions
