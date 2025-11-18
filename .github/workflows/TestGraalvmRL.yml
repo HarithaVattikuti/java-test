@@ -43,3 +43,85 @@ jobs:
           architecture: 'x86'
       - name: Validate Java Version
         run: java -version
+
+  test-explicit-token:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java (explicit token)
+      - uses: mahabaleshwars/setup-java@fix/graalvm-api-rate-limit
+        with:
+          distribution: temurin
+          java-version: 17
+          token: ${{ secrets.GITHUB_TOKEN }} # Uses provided input, not environment fallback
+
+      - name: Verify Java
+        run: java -version
+
+  test-env-token:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Remove input, use implicit GITHUB_TOKEN
+      - uses: mahabaleshwars/setup-java@fix/graalvm-api-rate-limit
+        with:
+          distribution: graalvm
+          java-version: 17
+        # No 'token' input provided
+
+      - name: Verify Java
+        run: java -version
+
+  test-no-token:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.PAT }} # disables the default GITHUB_TOKEN for simulation
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java (no token input or environment)
+      - uses: mahabaleshwars/setup-java@fix/graalvm-api-rate-limit
+        with:
+          distribution: temurin
+          java-version: 11
+        # No token input, environment variable unset
+
+      - name: Verify Java
+        run: java -version
+
+  test-invalid-token:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java (invalid token)
+      - uses: mahabaleshwars/setup-java@fix/graalvm-api-rate-limit
+        with:
+          distribution: temurin
+          java-version: 17
+          token: "this_is_not_a_valid_token"
+
+      - name: Verify Java
+        run: java -version
+
+  test-pat-token:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java using PAT
+      - uses: mahabaleshwars/setup-java@fix/graalvm-api-rate-limit
+        with:
+          distribution: temurin
+          java-version: 21
+          token: ${{ secrets.PAT }}
+
+      - name: Verify Java
+        run: java -version
