@@ -51,7 +51,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup Java (explicit token)
-      - uses: mahabaleshwars/setup-java@fix/graalvm-api-rate-limit
+        uses: mahabaleshwars/setup-java@fix/graalvm-api-rate-limit
         with:
           distribution: temurin
           java-version: 17
@@ -67,7 +67,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Remove input, use implicit GITHUB_TOKEN
-      - uses: mahabaleshwars/setup-java@fix/graalvm-api-rate-limit
+        uses: mahabaleshwars/setup-java@fix/graalvm-api-rate-limit
         with:
           distribution: graalvm
           java-version: 17
@@ -85,7 +85,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup Java (no token input or environment)
-      - uses: mahabaleshwars/setup-java@fix/graalvm-api-rate-limit
+        uses: mahabaleshwars/setup-java@fix/graalvm-api-rate-limit
         with:
           distribution: temurin
           java-version: 11
@@ -101,7 +101,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup Java (invalid token)
-      - uses: mahabaleshwars/setup-java@fix/graalvm-api-rate-limit
+        uses: mahabaleshwars/setup-java@fix/graalvm-api-rate-limit
         with:
           distribution: temurin
           java-version: 17
@@ -117,7 +117,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup Java using PAT
-      - uses: mahabaleshwars/setup-java@fix/graalvm-api-rate-limit
+        uses: mahabaleshwars/setup-java@fix/graalvm-api-rate-limit
         with:
           distribution: temurin
           java-version: 21
