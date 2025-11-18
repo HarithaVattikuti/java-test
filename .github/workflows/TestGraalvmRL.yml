@@ -10,11 +10,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: ["ubuntu-latest"]
+        os: ["ubuntu-latest",'macos-latest']
         version:
           - "11"
           - "21.0.4+8.1"
-          - "22-ea"
+          - "24-ea"
     steps:
       - uses: actions/checkout@v4
       - uses: mahabaleshwars/setup-java@fix/graalvm-api-rate-limit
@@ -33,7 +33,7 @@ jobs:
         version:
           - "11"
           - "21.0.4+8.1"
-          - "22-ea"
+          - "24-ea"
     steps:
       - uses: actions/checkout@v4
       - uses: mahabaleshwars/setup-java@fix/graalvm-api-rate-limit
@@ -70,7 +70,7 @@ jobs:
         uses: mahabaleshwars/setup-java@fix/graalvm-api-rate-limit
         with:
           distribution: graalvm
-          java-version: 17
+          java-version: '17.0.12'
         # No 'token' input provided
 
       - name: Verify Java
@@ -152,7 +152,7 @@ jobs:
         uses: actions/setup-java@v5
         with:
           distribution: graalvm
-          java-version: '17.0.12'
+          java-version: '24-ea'
         # No 'token' input provided
 
       - name: Verify Java
