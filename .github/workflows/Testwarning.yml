@@ -1,0 +1,28 @@
+name: Validate Java e2e
+
+on:
+  push:
+  workflow_dispatch:
+  
+jobs:
+  setup-java-major-versions:
+    name: ${{ matrix.distribution }} ${{ matrix.version }} (jdk-x64) - ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-15-intel, windows-latest, ubuntu-latest, macos-latest, ubuntu-22.04-arm, windows-11-arm]
+        distribution: [
+            'temurin',
+            'adopt',
+            'adopt-openj9',
+            'zulu',
+            'liberica',
+            'microsoft',
+            'semeru',
+            'corretto',
+            'dragonwell',
+            'sapmachine',
+            'jetbrains'
+          ] # internally 'adopt-hotspot' is the same as 'adopt'
+        version: ['21', '11', '17']
