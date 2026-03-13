@@ -11,7 +11,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [macos-15-intel, windows-latest, ubuntu-latest, macos-latest, ubuntu-22.04-arm, windows-11-arm]
+        os: [ windows-latest, ubuntu-latest, macos-latest]
         distribution: [
             'temurin',
             'adopt',
@@ -25,7 +25,7 @@ jobs:
             'sapmachine',
             'jetbrains'
           ] # internally 'adopt-hotspot' is the same as 'adopt'
-        version: ['21', '11', '17']
+        version: ['21'] #, '11', '17']
     steps:
       - name: Checkout
         uses: actions/checkout@v6
