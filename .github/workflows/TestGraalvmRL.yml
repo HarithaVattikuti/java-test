@@ -10,14 +10,15 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: ["ubuntu-latest",'macos-latest']
+        os: ["ubuntu-latest",'macos-latest', 'windows-11-arm','ubuntu-22.04-arm','windows-latest']
         version:
           - "11"
           - "21.0.4+8.1"
           - "24-ea"
+          - "25.0.2-ea.15"
     steps:
-      - uses: actions/checkout@v4
-      - uses: mahabaleshwars/setup-java@fix/graalvm-api-rate-limit
+      - uses: actions/checkout@v6
+      - uses: chiranjib-swain/setup-java@improve-java-error-messaging
         with:
           distribution: 'graalvm'
           java-version: ${{ matrix.version }}
