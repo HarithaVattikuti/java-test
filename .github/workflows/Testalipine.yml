@@ -1,0 +1,57 @@
+name: Validate alpine
+
+on:
+  workflow_dispatch:
+
+jobs:  
+  setup-java-alpine-linux-main:
+    name: Main - ${{ matrix.distribution }} ${{ matrix.version }} (jdk-x64) - alpine-linux - ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    container:
+      image: alpine:latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+        distribution: ['temurin', 'sapmachine','microsoft','graalvm','jetbrains','dragonwell']
+        version: ['21', '17']
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Install bash
+        run: apk add --no-cache bash
+      - name: setup-java
+        uses: actions/setup-java@v5
+        id: setup-java
+        with:
+          java-version: ${{ matrix.version }}
+          distribution: ${{ matrix.distribution }}
+      - name: Verify Java
+        run: bash __tests__/verify-java.sh "${{ matrix.version }}" "${{ steps.setup-java.outputs.path }}"
+        shell: bash
+
+  setup-java-alpine-linux:
+    name: ${{ matrix.distribution }} ${{ matrix.version }} (jdk-x64) - alpine-linux - ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    container:
+      image: alpine:latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+        distribution: ['temurin', 'sapmachine','microsoft','graalvm','jetbrains','dragonwell']
+        version: ['21', '17']
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Install bash
+        run: apk add --no-cache bash
+      - name: setup-java
+        uses: gdams/setup-java@alpine
+        id: setup-java
+        with:
+          java-version: ${{ matrix.version }}
+          distribution: ${{ matrix.distribution }}
+      - name: Verify Java
+        run: bash __tests__/verify-java.sh "${{ matrix.version }}" "${{ steps.setup-java.outputs.path }}"
+        shell: bash
