@@ -88,7 +88,7 @@ jobs:
       fail-fast: false
       matrix:
         os: ["ubuntu-latest"]
-        version_line: ["17.0.8.1+1080.1", "jetbrains-25.0.3+480.61"]
+        version_line: ["17.0.8.1+1080.1", "25.0.3+480.61"]
             
     steps:
       - name: Checkout repository
@@ -109,7 +109,7 @@ jobs:
       fail-fast: false
       matrix:
         os: ["ubuntu-latest"]
-        version_line: ["17.0.8.1+1080.1", "jetbrains-25.0.3+480.61"]
+        version_line: ["17.0.8.1+1080.1", "25.0.3+480.61"]
             
     steps:
       - name: Checkout repository
